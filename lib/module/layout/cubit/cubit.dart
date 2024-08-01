@@ -1,4 +1,3 @@
-
 import 'package:desktop/module/addItem.dart';
 import 'package:desktop/module/layout/cubit/state.dart';
 import 'package:desktop/module/sellItem.dart';
@@ -11,7 +10,6 @@ import '../../items.dart';
 import '../../sales.dart';
 
 class AppCubit extends Cubit<AppStates> {
-
   AppCubit() : super(AppInitialState()) {
     controller = SidebarXController(
       selectedIndex: 0,
@@ -52,7 +50,10 @@ class AppCubit extends Cubit<AppStates> {
       version: 1,
       onCreate: (database, version) {
         print('database created');
-        database.execute('CREATE TABLE data(id INTEGER PRIMARY KEY, name TEXT, amount INTEGER, code TEXT, price TEXT)').then((value) {
+        database
+            .execute(
+                'CREATE TABLE data(id INTEGER PRIMARY KEY, name TEXT, amount INTEGER, code TEXT, price TEXT)')
+            .then((value) {
           print('table created');
         }).catchError((error) {
           print('Error Table ${error.toString()}');
@@ -60,7 +61,9 @@ class AppCubit extends Cubit<AppStates> {
       },
       onOpen: (database) {
         print('database opened');
-        database.execute('ALTER TABLE data ADD COLUMN discount TEXT').then((value) {
+        database
+            .execute('ALTER TABLE data ADD COLUMN discount TEXT')
+            .then((value) {
           print('column added');
         }).catchError((error) {
           if (!error.toString().contains('duplicate column name')) {
@@ -83,7 +86,9 @@ class AppCubit extends Cubit<AppStates> {
     required String discount,
   }) async {
     return await database?.transaction((txn) async {
-      txn.rawInsert('INSERT INTO data(name, amount, code, price, discount) VALUES(?, ?, ?, ?, ?)', [name, amount, code, price, discount]).then((value) {
+      txn.rawInsert(
+          'INSERT INTO data(name, amount, code, price, discount) VALUES(?, ?, ?, ?, ?)',
+          [name, amount, code, price, discount]).then((value) {
         print("$value inserted into database");
         emit(AppInsertDatabaseState());
         getDatabase(database);
@@ -92,8 +97,6 @@ class AppCubit extends Cubit<AppStates> {
       });
     });
   }
-
-
 
   void getDatabase(database) {
     database.rawQuery('SELECT * FROM data').then((value) {
@@ -104,11 +107,14 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void updateDatabase(
-      {required String name, required amount, required String code, required String price, required int id}) {
+      {required String name,
+      required amount,
+      required String code,
+      required String price,
+      required int id}) {
     database?.rawUpdate(
         'UPDATE data SET name = ?, amount = ?, code = ?, price = ? WHERE id = ?',
-        [name, amount, code, price, id]
-    ).then((value) {
+        [name, amount, code, price, id]).then((value) {
       getDatabase(database);
       emit(AppUpdateDatabase());
     }).catchError((onError) {
@@ -116,20 +122,17 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-
-  void deleteDatabase({required int id}) async
-  {
-    database
-        ?.rawDelete('DELETE FROM data WHERE id = ?', [id]).then((value) {
+  void deleteDatabase({required int id}) async {
+    database?.rawDelete('DELETE FROM data WHERE id = ?', [id]).then((value) {
       getDatabase(database);
       emit(AppDeleteDatabase());
-    }
-    );
+    });
   }
 
   Future<Map?> getItemByCode(String code) async {
-    List<Map> result = await database?.rawQuery(
-        'SELECT * FROM data WHERE code = ?', [code]) ?? [];
+    List<Map> result =
+        await database?.rawQuery('SELECT * FROM data WHERE code = ?', [code]) ??
+            [];
     if (result.isNotEmpty) {
       return result.first;
     }
@@ -149,14 +152,9 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-
   Future<List<Map>> getSalesByDate(String date) async {
-    return await database?.rawQuery(
-        'SELECT * FROM data WHERE date = ?', [date]) ?? [];
+    return await database
+            ?.rawQuery('SELECT * FROM data WHERE date = ?', [date]) ??
+        [];
   }
-
-
 }
-
-
-

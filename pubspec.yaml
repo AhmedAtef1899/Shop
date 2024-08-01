@@ -50,6 +50,7 @@ dependencies:
   image_picker_for_web: ^3.0.2
   path: ^1.8.3
   sidebarx: ^0.17.1
+  http: ^1.2.2
 
 
 dev_dependencies:
