@@ -18,6 +18,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
   @override
   void initState() {
     BlocProvider.of<ProductsCubit>(context).fetchProducts();
+    BlocProvider.of<ProductsCubit>(context).fetchReceipts();
     super.initState();
   }
 

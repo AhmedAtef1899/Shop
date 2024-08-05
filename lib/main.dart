@@ -21,7 +21,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => ProductsCubit())],
+      providers: [
+        BlocProvider(
+            create: (context) => ProductsCubit()
+              ..fetchProducts()
+              ..fetchReceipts())
+      ],
       child: const MaterialApp(
         title: 'Store Management',
         debugShowCheckedModeBanner: false,

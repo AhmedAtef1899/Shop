@@ -1,11 +1,12 @@
 import 'package:desktop/module/addItem.dart';
 import 'package:desktop/module/layout/cubit/state.dart';
-import 'package:desktop/module/sellItem.dart';
+import 'package:desktop/module/sell_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:sqflite/sqflite.dart';
+import '../../employee.dart';
 import '../../items.dart';
 import '../../sales.dart';
 
@@ -31,6 +32,7 @@ class AppCubit extends Cubit<AppStates> {
     const SidebarXItem(icon: Icons.add, label: ' اضافة'),
     const SidebarXItem(icon: Icons.category_rounded, label: ' المبيعات'),
     const SidebarXItem(icon: Icons.data_object, label: ' البضاعة'),
+    const SidebarXItem(icon: Icons.person_3, label: ' الموظفين'),
   ];
 
   List<Widget> screens = [
@@ -38,6 +40,7 @@ class AppCubit extends Cubit<AppStates> {
     const AddItem(),
     const SalesScreen(),
     const ItemsScreen(),
+    const EmployeeScreen(),
   ];
 
   Database? database;

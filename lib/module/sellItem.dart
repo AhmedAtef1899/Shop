@@ -41,7 +41,6 @@ class _SellItemState extends State<SellItem> {
   @override
   Widget build(BuildContext context) {
     final cubit = ProductsCubit.get(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -64,13 +63,19 @@ class _SellItemState extends State<SellItem> {
                   child: Column(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(7),
+                        padding: const EdgeInsets.all(11),
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: CupertinoColors.black,
-                            width: 0.2,
-                          ),
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: const Row(
                           children: [
@@ -118,88 +123,91 @@ class _SellItemState extends State<SellItem> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: _cartProducts.length,
-                        itemBuilder: (context, index) => Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Center(
-                                    child: TextButton.icon(
-                                      label: const Text(
-                                        'إزالة',
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                      SizedBox(
+                        height: 320,
+                        width: double.infinity,
+                        child: ListView.separated(
+                          itemCount: _cartProducts.length,
+                          itemBuilder: (context, index) => Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Center(
+                                      child: TextButton.icon(
+                                        label: const Text(
+                                          'إزالة',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _cartProducts.remove(_cartProducts[index]);
+                                            calcSum(_cartProducts);
+                                          });
+                                        },
+                                        icon: const Icon(Icons.delete),
                                       ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _cartProducts.remove(_cartProducts[index]);
-                                          calcSum(_cartProducts);
-                                        });
-                                      },
-                                      icon: const Icon(Icons.delete),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      _cartProducts[index].productquota!,
-                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        _cartProducts[index].productquota!,
+                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      _cartProducts[index].productprice!,
-                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        _cartProducts[index].productprice!,
+                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        IconButton(
-                                          onPressed: (){},icon:
-                                          Icon(CupertinoIcons.plus_circle_fill,color: Colors.teal[800],)
-                                        ),
-                                        const Text('1'),
-                                        IconButton(
+                                  Expanded(
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          IconButton(
                                             onPressed: (){},icon:
-                                        Icon(CupertinoIcons.minus_circle_fill,color: Colors.teal,)
-                                        ),
-                                      ],
-                                    )
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      _cartProducts[index].productname!,
-                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                                      textDirection: TextDirection.rtl,
-                                      textAlign: TextAlign.right,
+                                            Icon(CupertinoIcons.plus_circle_fill,color: Colors.teal[800],)
+                                          ),
+                                          const Text('1'),
+                                          IconButton(
+                                              onPressed: (){},icon:
+                                          const Icon(CupertinoIcons.minus_circle_fill,color: Colors.teal,)
+                                          ),
+                                        ],
+                                      )
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            if (index + 1 == _cartProducts.length)
-                              const SizedBox(height: 20),
-                            if (index + 1 == _cartProducts.length)
-                              Center(
-                                child: Text(
-                                  'الاجمالي:  ${sum.toString()}',
-                                  style: const TextStyle(color: Colors.black, fontSize: 30),
-                                ),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        _cartProducts[index].productname!,
+                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                          ],
+                              if (index + 1 == _cartProducts.length)
+                                const SizedBox(height: 20),
+                              if (index + 1 == _cartProducts.length)
+                                Center(
+                                  child: Text(
+                                    'الاجمالي:  ${sum.toString()}',
+                                    style: const TextStyle(color: Colors.black, fontSize: 30),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
                         ),
-                        separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
                       ),
                     ],
                   ),
@@ -329,6 +337,93 @@ class _SellItemState extends State<SellItem> {
                             child: const Padding(
                               padding: EdgeInsets.all(15),
                               child: Text('بيع بفاتورة'),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: MaterialButton(
+                            onPressed: () {
+                              showDialog(context: context, builder: (context){
+                                return  AlertDialog(
+                                  title: const Center(
+                                    child: Text(
+                                      'مرتجع'
+                                    ),
+                                  ),
+                                  content:  Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextField(
+                                        textDirection: TextDirection.rtl,
+                                        onChanged: (value){
+                                          setState(() {
+                                            getMatch(model: cubit.productsModel!.products);
+                                          });
+                                        },
+                                        decoration: const InputDecoration(
+                                          label: Row(
+                                            children: [
+                                              Spacer(),
+                                              Text(
+                                                'الكود'
+                                              )
+                                            ],
+                                          )
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      const Expanded(
+                                        child: Text(
+                                          'الاسم'
+                                        ),
+                                      ),
+                                      const Expanded(
+                                        child: Text(
+                                            'السعر'
+                                        ),
+                                      ),
+                                      const Expanded(
+                                        child: Text(
+                                            'الكود'
+                                        ),
+                                      ),
+                                      const Expanded(
+                                        child: Text(
+                                            'الكمية بالمخزن'
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('تم'),
+                                      onPressed: () {
+                                        // Add your delete logic here
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('الغاء'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                            },
+                            color: Colors.teal,
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15),
+                              child: Text('مرتجع'),
                             ),
                           ),
                         ),
