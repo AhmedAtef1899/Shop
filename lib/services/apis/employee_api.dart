@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../models/employee_model.dart';
 import '../../src/app_endpoints.dart';
+
 class EmployeeApi {
   Future<Map<String, dynamic>> fetchEmployees() async {
     try {

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/products_bloc/employee_cubit.dart';
@@ -25,10 +26,10 @@ class EmployeeScreen extends StatelessWidget {
                     child: TextField(
                       controller: EmployeeCubit.get(context).passwordController,
                       textDirection: TextDirection.rtl,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Row(
-                          children: const [
+                          children: [
                             Spacer(),
                             Text('كلمة المرور'),
                           ],
@@ -41,10 +42,10 @@ class EmployeeScreen extends StatelessWidget {
                     child: TextField(
                       controller: EmployeeCubit.get(context).usernameController,
                       textDirection: TextDirection.rtl,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Row(
-                          children: const [
+                          children: [
                             Spacer(),
                             Text('اسم المستخدم'),
                           ],
@@ -97,7 +98,7 @@ class EmployeeScreen extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.edit, color: Colors.blue),
                                   onPressed: () {
-                                    // Handle edit
+                                    EmployeeCubit.get(context).updateEmployee(employee);
                                   },
                                 ),
                                 IconButton(

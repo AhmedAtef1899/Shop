@@ -32,14 +32,14 @@ class AppCubit extends Cubit<AppStates> {
     const SidebarXItem(icon: Icons.add, label: ' اضافة'),
     const SidebarXItem(icon: Icons.category_rounded, label: ' المبيعات'),
     const SidebarXItem(icon: Icons.data_object, label: ' البضاعة'),
-    const SidebarXItem(icon: Icons.person_3, label: ' الموظفين'),
+    const SidebarXItem(icon: Icons.people_alt, label: ' الموظفين'),
   ];
 
   List<Widget> screens = [
     const SellItem(),
     const AddItem(),
     const SalesScreen(),
-    const ItemsScreen(),
+    ItemsScreen(),
     const EmployeeScreen(),
   ];
 
