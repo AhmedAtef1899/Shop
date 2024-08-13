@@ -1,78 +1,43 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:desktop/src/app_endpoints.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/employee_model.dart';
-import '../../src/app_endpoints.dart';
+import '../../src/app_shared.dart';
 
-class EmployeeApi {
-  Future<Map<String, dynamic>> fetchEmployees() async {
-    try {
-      final response = await http.get(Uri.parse(AppEndPoints.showEmployees));
-      if (response.statusCode < 300) {
-        return json.decode(response.body);
-      } else {
-        log('Error: ${response.statusCode} ${response.reasonPhrase}');
-        return {'success': false, 'message': 'Failed to fetch employees'};
-      }
-    } catch (e) {
-      log('Exception: $e');
-      return {'success': false, 'message': 'An error occurred'};
+class EmployeesApi {
+  Future fetchEmployees() async {
+    var request = await http.get(Uri.parse(AppEndPoints.showEmployees));
+    if (request.statusCode < 300) {
+      var response = jsonDecode(request.body);
+      return response;
+    } else {
+      log('error');
     }
   }
 
-  Future<Map<String, dynamic>> addEmployee(Employee employee) async {
-    try {
-      final response = await http.post(
-        Uri.parse(AppEndPoints.addEmployee),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(employee.toJson()),
-      );
-      if (response.statusCode < 300) {
-        return json.decode(response.body);
-      } else {
-        log('Error: ${response.statusCode} ${response.reasonPhrase}');
-        return {'success': false, 'message': 'Failed to add employee'};
-      }
-    } catch (e) {
-      log('Exception: $e');
-      return {'success': false, 'message': 'An error occurred'};
+  Future fetchCurrentEmployeeData() async {
+    var request = await http.post(Uri.parse(AppEndPoints.employeeData),
+        body: {'username': AppShared.localStorage.getString('username')});
+    if (request.statusCode < 300) {
+      var response = jsonDecode(request.body);
+      return response;
+    } else {
+      log('error');
     }
   }
 
-  Future<Map<String, dynamic>> updateEmployee(Employee employee) async {
-    try {
-      final response = await http.put(
-        Uri.parse(AppEndPoints.updateEmployee),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(employee.toJson()),
-      );
-      if (response.statusCode < 300) {
-        return json.decode(response.body);
-      } else {
-        log('Error: ${response.statusCode} ${response.reasonPhrase}');
-        return {'success': false, 'message': 'Failed to update employee'};
-      }
-    } catch (e) {
-      log('Exception: $e');
-      return {'success': false, 'message': 'An error occurred'};
-    }
-  }
-
-  Future<Map<String, dynamic>> deleteEmployee(String id) async {
-    try {
-      final response = await http.delete(
-        Uri.parse('${AppEndPoints.deleteEmployee}?id=$id'),
-      );
-      if (response.statusCode < 300) {
-        return json.decode(response.body);
-      } else {
-        log('Error: ${response.statusCode} ${response.reasonPhrase}');
-        return {'success': false, 'message': 'Failed to delete employee'};
-      }
-    } catch (e) {
-      log('Exception: $e');
-      return {'success': false, 'message': 'An error occurred'};
+  Future createEmployee({required model}) async {
+    var request =
+        await http.post(Uri.parse(AppEndPoints.createEmployee), body: model);
+    print(request.body);
+    if (request.statusCode < 300) {
+      print(request.body);
+      var response = jsonDecode(request.body);
+      print(response);
+      return response;
+    } else {
+      log('error');
     }
   }
 }

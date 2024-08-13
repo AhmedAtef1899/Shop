@@ -2,10 +2,9 @@ import 'package:desktop/module/layout/cubit/cubit.dart';
 import 'package:desktop/module/layout/cubit/state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sidebarx/sidebarx.dart';
-
-import '../../blocs/products_bloc/products_cubit.dart';
 
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({super.key});
@@ -16,16 +15,9 @@ class LayoutScreen extends StatefulWidget {
 
 class _LayoutScreenState extends State<LayoutScreen> {
   @override
-  void initState() {
-    BlocProvider.of<ProductsCubit>(context).fetchProducts();
-    BlocProvider.of<ProductsCubit>(context).fetchReceipts();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..createDatabase(),
+      create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         builder: (context, state) {
           var cubit = AppCubit.get(context);
@@ -37,8 +29,42 @@ class _LayoutScreenState extends State<LayoutScreen> {
                     controller: cubit.controller,
                     items: cubit.sideBar,
                     headerBuilder: (context, extended) {
-                      return const SizedBox(
-                        height: 40,
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                child: Image.asset('images/vector-store-front-building-with-big-city-background.jpg'),
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                'Store',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  fontStyle: FontStyle.italic,
+                                  shadows: [
+                                    Shadow(
+                                      color: CupertinoColors.white,
+                                      blurRadius: 30,
+                                    )
+                                  ],
+                                  color: CupertinoColors.white
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          )
+                        ],
                       );
                     },
                     theme: const SidebarXTheme(
