@@ -91,6 +91,15 @@ class _ItemsScreenState extends State<ItemsScreen> {
                     Expanded(
                       child: Center(
                         child: Text(
+                          'طباعة',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
                           'مسح',
                           style: TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w600),
@@ -213,6 +222,41 @@ Widget items({required Map model, context}) {
         Expanded(
           child: Center(
             child: IconButton(
+              icon: const Icon(Icons.local_printshop_rounded, color: Colors.teal),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('تنبيه'),
+                      content: const Text('هل تريد ان تحذف هذا المنتج؟'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('نعم'),
+                          onPressed: () {
+                            BlocProvider.of<ProductsCubit>(context)
+                                .deleteProduct(
+                                    productCode: model['product_code']);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('لا'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 showDialog(
@@ -225,7 +269,9 @@ Widget items({required Map model, context}) {
                         TextButton(
                           child: const Text('نعم'),
                           onPressed: () {
-                            // Add your delete logic here
+                            BlocProvider.of<ProductsCubit>(context)
+                                .deleteProduct(
+                                    productCode: model['product_code']);
                             Navigator.of(context).pop();
                           },
                         ),

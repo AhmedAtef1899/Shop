@@ -2,7 +2,6 @@ import 'package:desktop/module/layout/cubit/cubit.dart';
 import 'package:desktop/module/layout/cubit/state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -29,42 +28,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
                     controller: cubit.controller,
                     items: cubit.sideBar,
                     headerBuilder: (context, extended) {
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                child: Image.asset('images/vector-store-front-building-with-big-city-background.jpg'),
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle
-                                ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                'Store',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800,
-                                  fontStyle: FontStyle.italic,
-                                  shadows: [
-                                    Shadow(
-                                      color: CupertinoColors.white,
-                                      blurRadius: 30,
-                                    )
-                                  ],
-                                  color: CupertinoColors.white
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          )
-                        ],
+                      return const SizedBox(
+                        height: 40,
                       );
                     },
                     theme: const SidebarXTheme(

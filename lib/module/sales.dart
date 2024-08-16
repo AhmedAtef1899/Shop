@@ -1,7 +1,5 @@
 import 'package:desktop/blocs/products_bloc/products_cubit.dart';
 import 'package:desktop/blocs/products_bloc/products_states.dart';
-import 'package:desktop/src/exp.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +7,7 @@ import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import '../components/expansion_tile.dart';
 import '../models/receipt_model.dart';
 
 class SalesScreen extends StatefulWidget {
@@ -52,7 +51,7 @@ class _SalesScreenState extends State<SalesScreen> {
 
   Future<void> _printReceipt(Receipt receipt) async {
     final pdf = pw.Document();
-
+    var font = await PdfGoogleFonts.cairoBold();
     pdf.addPage(
       pw.Page(
         build: (pw.Context context) {
@@ -61,13 +60,21 @@ class _SalesScreenState extends State<SalesScreen> {
             children: [
               pw.Text(
                 'Receipt No: ${receipt.id}',
-                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                style:
+                    pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
               ),
               pw.Text('Date: ${receipt.datecreated}'),
               pw.SizedBox(height: 20),
-              pw.Text('Items:', style: const pw.TextStyle(fontSize: 18)),
+              pw.Text(
+                'Items:',
+                style: const pw.TextStyle(fontSize: 18),
+              ),
               pw.TableHelper.fromTextArray(
-                headers: [ 'Name', 'Price', 'Quantity'],
+                headers: ['Name', 'Price', 'Quantity'],
+                cellStyle: pw.TextStyle(
+                  font: font,
+                ),
+                tableDirection: pw.TextDirection.rtl,
                 data: receipt.receiptitemlist!.map((item) {
                   return [
                     item?.productName,
@@ -77,7 +84,11 @@ class _SalesScreenState extends State<SalesScreen> {
                 }).toList(),
               ),
               pw.SizedBox(height: 20),
-              pw.Text('Total Price: ${receipt.totalprice} جنيه'),
+              pw.Text('Total Price: ${receipt.totalprice} جنية',
+                  style: pw.TextStyle(
+                    font: font,
+                  ),
+                  textDirection: pw.TextDirection.rtl),
             ],
           );
         },
@@ -174,157 +185,160 @@ class _SalesScreenState extends State<SalesScreen> {
                 Expanded(
                   child: cubit.receiptModel == null
                       ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                          child: CircularProgressIndicator(),
+                        )
                       : _salesByDate.isEmpty
-                      ? const Center(
-                    child: Text(
-                      'لا توجد مبيعات لهذا التاريخ',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )
-                      : ListView.builder(
-                    itemCount: _salesByDate.length,
-                    itemBuilder: (context, index) {
-                      var sale = _salesByDate[index];
-                      return MyExpansion(
-                        content: Column(
-                          children: [
-                            SizedBox(
-                              height: 250,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  children: [
-                                    const Row(
-                                      children: [
-                                        Spacer(),
-                                        Expanded(
-                                          child: Text(
-                                            'الكود',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.w500,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            'السعر',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.w500,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            'العدد',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.w500,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            'النوع',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.w500,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Expanded(
-                                      child: ListView.separated(
-                                        itemCount: sale
-                                            .receiptitemlist!.length,
-                                        itemBuilder:
-                                            (context, itemIndex) =>
-                                            Row(
-                                              children: [
-                                                const Spacer(),
-                                                Expanded(
-                                                  child: Text(
-                                                    sale
-                                                        .receiptitemlist![
-                                                    itemIndex]!
-                                                        .productCode!,
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .w400,
-                                                        fontSize: 16),
+                          ? const Center(
+                              child: Text(
+                                'لا توجد مبيعات لهذا التاريخ',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: _salesByDate.length,
+                              itemBuilder: (context, index) {
+                                var sale = _salesByDate[index];
+                                return MyExpansion(
+                                  content: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 250,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(20),
+                                          child: Column(
+                                            children: [
+                                              const Row(
+                                                children: [
+                                                  Spacer(),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'الكود',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 18),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'السعر',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 18),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'العدد',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 18),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'النوع',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 18),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Expanded(
+                                                child: ListView.separated(
+                                                  itemCount: sale
+                                                      .receiptitemlist!.length,
+                                                  itemBuilder:
+                                                      (context, itemIndex) =>
+                                                          Row(
+                                                    children: [
+                                                      const Spacer(),
+                                                      Expanded(
+                                                        child: Text(
+                                                          sale
+                                                              .receiptitemlist![
+                                                                  itemIndex]!
+                                                              .productCode!,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 16),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Text(
+                                                          sale
+                                                              .receiptitemlist![
+                                                                  itemIndex]!
+                                                              .productPrice!,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 16),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Text(
+                                                          '${sale.receiptitemlist![itemIndex]!.itemCount}',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 16),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Text(
+                                                          sale
+                                                              .receiptitemlist![
+                                                                  itemIndex]!
+                                                              .productName!,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 16),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  separatorBuilder:
+                                                      (BuildContext context,
+                                                              int index) =>
+                                                          const SizedBox(
+                                                    height: 10,
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  child: Text(
-                                                    sale
-                                                        .receiptitemlist![
-                                                    itemIndex]!
-                                                        .productPrice!,
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .w400,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    '${sale.receiptitemlist![itemIndex]!.itemCount}',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .w400,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    sale
-                                                        .receiptitemlist![
-                                                    itemIndex]!
-                                                        .productName!,
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .w400,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                        separatorBuilder:
-                                            (BuildContext context,
-                                            int index) =>
-                                        const SizedBox(
-                                          height: 10,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                      ElevatedButton.icon(
+                                        onPressed: () => _printReceipt(sale),
+                                        icon: const Icon(Icons.print),
+                                        label: const Text('طباعة الفاتورة'),
+                                      ),
+                                    ],
+                                  ),
+                                  title:
+                                      ' فاتوره رقم ${sale.id}  بتاريخ ${sale.datecreated}   الأجمالي ${sale.totalprice} جنيه',
+                                );
+                              },
                             ),
-                            ElevatedButton.icon(
-                              onPressed: () =>
-                                  _printReceipt(sale),
-                              icon: const Icon(Icons.print),
-                              label: const Text('طباعة الفاتورة'),
-                            ),
-                          ],
-                        ),
-                        title:
-                        ' فاتوره رقم ${sale.id}  بتاريخ ${sale.datecreated}   الأجمالي ${sale.totalprice} جنيه',
-                      );
-                    },
-                  ),
                 ),
               ],
             ),

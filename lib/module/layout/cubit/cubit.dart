@@ -3,7 +3,6 @@ import 'package:desktop/module/clientsData.dart';
 import 'package:desktop/module/employee_data.dart';
 import 'package:desktop/module/employees.dart';
 import 'package:desktop/module/layout/cubit/state.dart';
-import 'package:desktop/module/printing.dart';
 import 'package:desktop/module/return_data.dart';
 import 'package:desktop/module/sell_item.dart';
 import 'package:desktop/module/splash_screen.dart';
@@ -43,12 +42,13 @@ class AppCubit extends Cubit<AppStates> {
     const SidebarXItem(icon: Icons.category_rounded, label: ' المبيعات'),
     const SidebarXItem(icon: Icons.data_object, label: ' البضاعة'),
     const SidebarXItem(icon: Icons.assignment_return, label: ' المرتجعات'),
-    const SidebarXItem(icon: FontAwesomeIcons.codePullRequest, label: ' الخزينة'),
+    const SidebarXItem(
+        icon: FontAwesomeIcons.codePullRequest, label: ' الخزينة'),
     currentEmployee.role == 'admin'
         ? const SidebarXItem(icon: Icons.people, label: ' الموظفين')
         : const SidebarXItem(icon: Icons.people, label: ' بياناتي'),
     const SidebarXItem(icon: Icons.man_3, label: ' عملاء'),
-    const SidebarXItem(icon: Icons.print, label: ' طباعة'),
+    // const SidebarXItem(icon: Icons.print, label: ' طباعة'),
     SidebarXItem(
       icon: Icons.logout,
       label: ' تسجيل خروج',
@@ -70,7 +70,7 @@ class AppCubit extends Cubit<AppStates> {
         ? const EmployeeScreen()
         : const EmployeeDataScreen(),
     const AddClients(),
-    const PrintingScreen(),
+    // const PrintingScreen(),
     const SplashScreen(),
   ];
 
